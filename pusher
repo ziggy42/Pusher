@@ -10,7 +10,8 @@ DEVICES_URL = "https://api.pushbullet.com/v2/devices"
 USER_URL = "https://api.pushbullet.com/v2/users/me"
 UPLOAD_REQUEST_URL = "https://api.pushbullet.com/v2/upload-request"
 
-def push(AccessToken, msg, title='', device=''):
+
+def push(AccessToken, msg, title=None, device=None):
     print("Pushing '{0}'...\n".format(msg))
     
     data = { 
@@ -27,47 +28,11 @@ def push(AccessToken, msg, title='', device=''):
         print("Error: {0}".format(resp.get('error')['message']))
 
 
-def total_push(AccessToken):
-    title = input("Push title: ")
-    content = input("Push conentent: ")
-
-    push(AccessToken, content, title)
-
-
-def total_device_push(AccessToken, device):
+def push_verbose(AccessToken, device=None):
     title = input("Push title: ")
     content = input("Push conentent: ")
 
     push(AccessToken, content, title, device)
-
-
-def get_device_list(AccessToken):
-    print("Getting the devices that can be pushed to...\n")
-
-    resp = requests.get(DEVICES_URL, auth=(AccessToken, '')).json()
-    if resp.get('error') == None:
-        for device in resp['devices']:
-            if device['pushable']:
-                print("ID: {0}\tDevice: {1}".format(device['iden'], device['nickname']))
-    else:
-        print("Error: {0}".format(resp.get('error')['message']))
-
-
-def get_user_info(AccessToken):
-	print("Getting user info...\n")
-
-	resp = requests.get(USER_URL, auth=(AccessToken, '')).json()
-	if resp.get('error') == None:
-		print(("Iden: {0}\n"
-			"Email: {1}\n"
-			"Email Normalized: {2}\n"
-			"Created: {3}\n"
-			"Modified: {4}\n"
-			"Profile Pic: {5}\n"
-			"Name: {6}").format(resp['iden'], resp['email'], resp['email_normalized'], 
-				resp['created'], resp['modified'], resp['image_url'], resp['name']))
-	else:
-		print("Error: {0}".format(resp.get('error')['message']))
 
 
 def push_file(AccessToken, file_name):
@@ -85,10 +50,11 @@ def push_file(AccessToken, file_name):
         if resp.get('error') != None:
             print("Error: {0}".format(resp.get('error')['message']))
             return
-		
-        #"http://graphics8.nytimes.com/images/2013/04/22/arts/futurama/futurama-blog480.png"
+
+        #file_url = "http://graphics8.nytimes.com/images/2013/04/22/arts/futurama/futurama-blog480.png"
         file_url = resp.get('file_url')
-        resp = requests.post(resp.get('upload_url'), data=resp.get('data'), auth=(AccessToken, ''), files={"file": f})
+        print(file_url)
+        resp = requests.post(resp.get('upload_url'), data=resp.get('data'), auth=(AccessToken, ''), files={'file': f})
 
         data = { 
             'type' : 'file', 
@@ -106,6 +72,45 @@ def push_file(AccessToken, file_name):
     f.close()
 
 
+def get_device_list(AccessToken):
+    print("Getting the devices that can be pushed to...\n")
+
+    resp = requests.get(DEVICES_URL, auth=(AccessToken, '')).json()
+    if resp.get('error') == None:
+        for device in resp['devices']:
+            if device['pushable']:
+                print("ID: {0}\tDevice: {1}".format(device['iden'], device['nickname']))
+    else:
+        print("Error: {0}".format(resp.get('error')['message']))
+
+
+def get_user_info(AccessToken):
+    print("Getting user info...\n")
+
+    resp = requests.get(USER_URL, auth=(AccessToken, '')).json()
+    if resp.get('error') == None:
+        print(("Iden: {0}\n"
+            "Email: {1}\n"
+            "Email Normalized: {2}\n"
+            "Created: {3}\n"
+            "Modified: {4}\n"
+            "Profile Pic: {5}\n"
+            "Name: {6}").format(resp['iden'], resp['email'], resp['email_normalized'], 
+                resp['created'], resp['modified'], resp['image_url'], resp['name']))
+    else:
+        print("Error: {0}".format(resp.get('error')['message']))
+
+
+def get_pushes_list(AccessToken):
+    print("Getting pushes history...\n")
+
+    resp = requests.get(PUSH_URL, auth=(AccessToken, '')).json()
+    pushes = resp.get('pushes')
+
+    for push in pushes:
+        print(str(push) + '\n')
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Pusher is a PushBullet command line client')
     parser.add_argument(dest='AccessToken')
@@ -113,10 +118,11 @@ if __name__ == '__main__':
     group.add_argument('-sp', help='Simple Push', metavar='MSG')
     group.add_argument('-spd', help='Simple Push to a selected device', metavar=('MSG', 'DEVICE_ID'), nargs=2)
     group.add_argument('-p', help='Push', action='store_true')
+    group.add_argument('-pf', help="Push file",  metavar='FILE_NAME')
     group.add_argument('-pd', help='Push to a selected device', metavar='DEVICE_ID')
     group.add_argument('-i', help="Get user info",  action='store_true')
     group.add_argument('-l', help="Get device list",  action='store_true')
-    group.add_argument('-pf', help="Upload file",  metavar='FILE_NAME')
+    group.add_argument('-pl', help="Get pushes history",  action='store_true')
     args = parser.parse_args()
 
     if args.sp != None:
@@ -126,12 +132,14 @@ if __name__ == '__main__':
     elif args.p:
         total_push(args.AccessToken)
     elif args.pd:
-        total_device_push(args.AccessToken, args.pd)
+        push_verbose(args.AccessToken, args.pd)
     elif args.i:
         get_user_info(args.AccessToken)
     elif args.l:
         get_device_list(args.AccessToken)
     elif args.pf != None:
         push_file(args.AccessToken, args.pf)
+    elif args.pl:
+        get_pushes_list(args.AccessToken)
     else:
         total_push(args.AccessToken)
