@@ -3,7 +3,6 @@ import argparse
 import json
 import requests
 import mimetypes
-import traceback
 
 PUSH_URL = "https://api.pushbullet.com/v2/pushes"
 DEVICES_URL = "https://api.pushbullet.com/v2/devices"
@@ -46,15 +45,14 @@ def push_file(AccessToken, file_name):
             'file_type' : file_type
         }
 
-        resp = requests.post(UPLOAD_REQUEST_URL, data=data, auth=(AccessToken, '')).json()
+        headers = {'Authorization': 'Bearer ' + AccessToken, 'Content-Type': 'application/json'}
+        resp = requests.post(UPLOAD_REQUEST_URL, data=json.dumps({'file_name': 'image.jpg'}), headers=headers).json()
         if resp.get('error') != None:
             print("Error: {0}".format(resp.get('error')['message']))
             return
 
-        #file_url = "http://graphics8.nytimes.com/images/2013/04/22/arts/futurama/futurama-blog480.png"
         file_url = resp.get('file_url')
-        print(file_url)
-        resp = requests.post(resp.get('upload_url'), data=resp.get('data'), auth=(AccessToken, ''), files={'file': f})
+        resp = requests.post(resp.get('upload_url'), data=resp.get('data'), files={'file': f})
 
         data = { 
             'type' : 'file', 
@@ -67,8 +65,7 @@ def push_file(AccessToken, file_name):
 		
 
     except requests.exceptions.ConnectionError:
-        #print("Try again later.")
-        traceback.print_exc()
+        print("Try again later.")
     f.close()
 
 
