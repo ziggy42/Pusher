@@ -5,24 +5,49 @@ Pusher is  a simple, command-line client for [Pushbullet](https://www.pushbullet
 
 Usage
 --
-Find your access token [here](https://www.pushbullet.com/account) 
+* Actions:
 ```
-usage: pusher [-h]
-              [-sp MSG | -spd MSG DEVICE_ID | -p | -pd DEVICE_ID | -i | -l | -pf FILE_NAME]
-              AccessToken
+usage: pusher.py [-h] {push,list,user} ...
 
 Pusher is a PushBullet command line client
 
 positional arguments:
-  AccessToken
+  {push,list,user}
+    push            push command
+    list            list command
+    user            display user info
 
 optional arguments:
-  -h, --help          show this help message and exit
-  -sp MSG             Simple Push
-  -spd MSG DEVICE_ID  Simple Push to a selected device
-  -p                  Push
-  -pd DEVICE_ID       Push to a selected device
-  -i                  Get user info
-  -l                  Get device list
-  -pf FILE_NAME       Upload file
+  -h, --help        show this help message and exit
+```
+
+* Push
+```
+usage: pusher.py push [-h] [-f path] body [title]
+
+positional arguments:
+  body        the main content of the push
+  title       the title of the push
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -f path     file
+
+```
+
+* List
+```
+usage: pusher.py list [-h] [-d]
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -d          list devices
+```
+
+* User
+```
+usage: pusher.py user [-h]
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
