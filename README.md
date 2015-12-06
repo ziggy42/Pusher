@@ -1,4 +1,4 @@
 #Pusher
 
 
-Pusher is  python library for [Pushbullet](https://www.pushbullet.com/) .
+Pusher is a python library for [Pushbullet](https://www.pushbullet.com/) .
