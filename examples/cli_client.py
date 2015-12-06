@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+import pusher
 import argparse
 
 from pusher import api

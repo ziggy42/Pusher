@@ -12,8 +12,7 @@ config = {
     'version': '0.1',
     'install_requires': [],
     'packages': ['pusher'],
-    'scripts': ['bin/push.py'],
-    'name': 'Pusher'
+    'name': 'pusher'
 }
 
 setup(**config)

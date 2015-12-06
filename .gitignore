@@ -1,2 +1,6 @@
+*.pyc
+*.swp
+venv
+pusher.egg-info
 pusher/__pycache__
-pusher/auth.json
+examples/auth.json

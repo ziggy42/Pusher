@@ -23,7 +23,7 @@ class API(object):
                     token_json = json.load(f)
                     self.token = token_json['access_token']
             else:
-                self.token = input("Insert your AccessToken (you can find it here: {0}): ".format(ACCESS_TOKEM_PAGE))  
+                self.token = input("Insert your AccessToken (you can find it here: {0}): ".format(ACCESS_TOKEM_PAGE))
                 with open('auth.json', 'w+') as f:
                     json.dump(dict(access_token=self.token), f)
 
@@ -109,5 +109,5 @@ class API(object):
                     print(str(push))
             else:
                 print(str(push))
-
-
+                
+                 
