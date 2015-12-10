@@ -1,4 +1,3 @@
-import pusher
 import argparse
 
 from pusher import api

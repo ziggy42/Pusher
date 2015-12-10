@@ -6,6 +6,7 @@ import mimetypes
 
 ACCESS_TOKEM_PAGE = "https://www.pushbullet.com/#settings/account"
 PUSH_URL = "https://api.pushbullet.com/v2/pushes"
+EPHEMERALS_URL = "https://api.pushbullet.com/v2/ephemerals"
 DEVICES_URL = "https://api.pushbullet.com/v2/devices"
 USER_URL = "https://api.pushbullet.com/v2/users/me"
 UPLOAD_REQUEST_URL = "https://api.pushbullet.com/v2/upload-request"
@@ -36,6 +37,17 @@ class API(object):
         }
 
         resp = requests.post(PUSH_URL, data=data, auth=(self.token, '')).json()
+        if resp.get('error'):
+            print("Error: {0}".format(resp.get('error')['message']))
+
+
+    def send_ephemeral(self, json_object):
+        data = {
+            'type' : 'push',
+            'push' : json_object
+        }
+        
+        resp = requests.post(EPHEMERALS_URL, json=data, auth=(self.token, '')).json()
         if resp.get('error'):
             print("Error: {0}".format(resp.get('error')['message']))
 
