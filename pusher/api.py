@@ -88,6 +88,16 @@ class API(object):
             print("Error: {0}".format(resp.get('error')['message']))
 
 
+    def delete_push(self, push_id):
+        resp = requests.delete(PUSH_URL + "/" + push_id, auth=(self.token, ''))
+        if resp.status_code == 200:
+            print("Result: OK")
+        elif resp.status_code == 404:
+            print("Result: Push not found")
+        else:
+            print("Result: something went wrong")
+
+
     def send_ephemeral(self, json_object):
         data = {
             'type' : 'push',
