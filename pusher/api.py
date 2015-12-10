@@ -41,13 +41,15 @@ class API(object):
             print("Error: {0}".format(resp.get('error')['message']))
 
 
-    def send_ephemeral(self, json_object):
+    def push_link(self, body='', title='', url=''):
         data = {
-            'type' : 'push',
-            'push' : json_object
+            'type' : 'link', 
+            'title' : title, 
+            'body' : body,
+            'url' : url,
         }
         
-        resp = requests.post(EPHEMERALS_URL, json=data, auth=(self.token, '')).json()
+        resp = requests.post(PUSH_URL, data=data, auth=(self.token, '')).json()
         if resp.get('error'):
             print("Error: {0}".format(resp.get('error')['message']))
 
@@ -82,6 +84,17 @@ class API(object):
 
         resp = requests.post(PUSH_URL, data=data, auth=(self.token, '')).json()
 
+        if resp.get('error'):
+            print("Error: {0}".format(resp.get('error')['message']))
+
+
+    def send_ephemeral(self, json_object):
+        data = {
+            'type' : 'push',
+            'push' : json_object
+        }
+        
+        resp = requests.post(EPHEMERALS_URL, json=data, auth=(self.token, '')).json()
         if resp.get('error'):
             print("Error: {0}".format(resp.get('error')['message']))
 
