@@ -22,4 +22,4 @@ api = api.API()
 api.push_file("path/to/file", "My Body")
 ```
 
-See the [examples](https://github.com/ziggy42/Pusher/tree/master/examples) for more details.
+See the [examples](https://github.com/ziggy42/Pusher/tree/master/examples) and the [official docs](https://docs.pushbullet.com/) for more details.
