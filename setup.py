@@ -10,7 +10,7 @@ config = {
     'download_url': '',
     'author_email': 'vanpivix@gmail.com',
     'version': '0.1',
-    'install_requires': [],
+    'install_requires': ['requests'],
     'packages': ['pusher'],
     'name': 'pusher'
 }

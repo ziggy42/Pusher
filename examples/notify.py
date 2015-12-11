@@ -6,13 +6,13 @@ from pusher import api
 
 
 def print_notification(bus, message):
-	keys = ["app_name", "replaces_id", "app_icon", "summary", "body", "actions", "hints", "expire_timeout"]
-	args = message.get_args_list()
+    keys = ["app_name", "replaces_id", "app_icon", "summary", "body", "actions", "hints", "expire_timeout"]
+    args = message.get_args_list()
 	
-	if len(args) == 8:
-    	notification = dict([(keys[i], args[i]) for i in range(8)])
-    	print notification["summary"], notification["body"]
-    	api.push(notification["summary"], notification["body"])
+    if len(args) == 8:
+        notification = dict([(keys[i], args[i]) for i in range(8)])
+        print notification["summary"], notification["body"]
+        api.push(notification["summary"], notification["body"])
 
 
 api = api.API()

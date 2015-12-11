@@ -63,7 +63,7 @@ class API(object):
             'file_type' : file_type
         }
 
-        headers = {'Authorization': 'Bearer ' + self.token, 'Content-Type': 'application/json'} # Really?
+        headers = {'Authorization': 'Bearer ' + self.token, 'Content-Type': 'application/json'}
         resp = requests.post(UPLOAD_REQUEST_URL, data=json.dumps({'file_name': 'image.jpg'}), headers=headers).json()
         
         if resp.get('error'):
